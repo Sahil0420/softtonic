@@ -13,7 +13,7 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({origin : "*"}));
 
 //Connecting the database
 
@@ -25,7 +25,7 @@ mongoose
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.log(`Mongo db connection error --> ${err}`));
 
-app.use("/products", authMiddleware);
+// app.use("/products", authMiddleware);
 
 app.get("/", (req, res) => {
   res.send("Hello");

@@ -1,16 +1,95 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
-const variantSchema = new mongoose.Schema({
-    color : {type: String, required: true},
-    size : {type: String, required: true},
-    price : Number,
-})
+const productAttributesSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  slug: { type: String, unique: true },
+});
+
+productAttributesSchema.pre("save", function (next) {
+  this.slug = this.name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/(^-|-$)/g, "");
+  next();
+});
+
+const productAttributesValuesSchema = new mongoose.Schema(
+  {
+    attribute: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ProductAttribute",
+      required: true,
+    },
+    value: { type: String, required: true },
+  },
+  { timestamps: true }
+);
+
+const productVariants = new mongoose.Schema({
+  product: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
+  price: { type: Number, required: true },
+  attributes: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "ProductAttributesValues" },
+  ],
+});
+
+const productVariantAttributeSchema = new mongoose.Schema(
+  {
+    variants: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ProductVariants",
+      required: true,
+    },
+    attribute_value: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ProductAttributesValues",
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
 
 const productSchema = new mongoose.Schema({
-    name : {type: String, required: true},
-    variants : [variantSchema],
-})
+  name: { type: String, required: true },
+  slug: { type: String, unique: true },
+  type: { type: String, enum: ["simple", "variant"], required: true },
+  price: {
+    type: Number,
+    required: function () {
+      return this.type === "simple";
+    },
+  },
+  content: { type: String },
+  attributes: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "ProductAttributes" },
+  ],
+  variants: [{ type: mongoose.Schema.Types.ObjectId, ref: "ProductVariants" }],
+});
 
-export default mongoose.model("Product", productSchema);
+function generateSlug(text) {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_") // Replace non-alphanumeric characters with dashes
+    .replace(/(^-|-$)/g, ""); // Remove leading and trailing dashes
+}
 
-//Product Schema shows us how we are storing the data in mongodb
+productSchema.pre("save", function (next) {
+  if (this.isModified("name") || this.isNew) {
+    this.slug = generateSlug(this.name);
+  }
+  next();
+});
+
+const Product = mongoose.model("Product", productSchema);
+const ProductAttributes = mongoose.model("ProductAttributes", productAttributesSchema);
+const ProductAttributesValues = mongoose.model("ProductAttributesValues", productAttributesValuesSchema);
+const ProductVariants = mongoose.model("ProductVariants", productVariants); 
+const ProductVariantAttribute = mongoose.model("ProductVariantAttribute", productVariantAttributeSchema);
+
+module.exports = {
+    Product,
+    ProductAttributes,
+    ProductAttributesValues,
+    ProductVariants,
+    ProductVariantAttribute,
+}

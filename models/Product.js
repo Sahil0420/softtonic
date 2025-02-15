@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const productAttributesSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -80,16 +80,20 @@ productSchema.pre("save", function (next) {
   next();
 });
 
-const Product = mongoose.model("Product", productSchema);
-const ProductAttributes = mongoose.model("ProductAttributes", productAttributesSchema);
-const ProductAttributesValues = mongoose.model("ProductAttributesValues", productAttributesValuesSchema);
-const ProductVariants = mongoose.model("ProductVariants", productVariants); 
-const ProductVariantAttribute = mongoose.model("ProductVariantAttribute", productVariantAttributeSchema);
-
-module.exports = {
-    Product,
-    ProductAttributes,
-    ProductAttributesValues,
-    ProductVariants,
-    ProductVariantAttribute,
-}
+export const Product = mongoose.model("Product", productSchema);
+export const ProductAttributes = mongoose.model(
+  "ProductAttributes",
+  productAttributesSchema
+);
+export const ProductAttributesValues = mongoose.model(
+  "ProductAttributesValues",
+  productAttributesValuesSchema
+);
+export const ProductVariants = mongoose.model(
+  "ProductVariants",
+  productVariants
+);
+export const ProductVariantAttribute = mongoose.model(
+  "ProductVariantAttribute",  
+  productVariantAttributeSchema
+);

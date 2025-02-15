@@ -1,11 +1,11 @@
-const express = require("express");
-const {
+import express from 'express'
+import {
   Product,
   ProductAttributes,
   ProductAttributesValues,
   ProductVariants,
   ProductVariantAttribute,
-} = require("../models/Product");
+} from "../models/Product.js";
 
 const router = express.Router();
 
@@ -35,7 +35,7 @@ router.post("/", async (req, res) => {
 
     let attributeMap = {};
 
-    // Handle attributes (create them if they don't exist)
+    // Handle attributes
     for (let attr of attributes) {
       let attribute = await ProductAttributes.findOne({ name: attr.name });
       if (!attribute) {
@@ -43,13 +43,10 @@ router.post("/", async (req, res) => {
         await attribute.save();
       }
 
-      // Store the _id of the created attribute
       attributeMap[attr.name] = attribute._id;
 
-      // Save the attribute reference to the product
       product.attributes.push(attribute._id);
 
-      // Handle attribute values
       for (let value of attr.values) {
         let attrValue = await ProductAttributesValues.findOne({ value });
         if (!attrValue) {
@@ -62,11 +59,9 @@ router.post("/", async (req, res) => {
       }
     }
 
-    // Save the updated product with attributes
     await product.save();
 
     let variantList = [];
-    // Handle variants (create them if the product type is 'variant')
     if (type === "variant" && variants && variants.length > 0) {
       for (let variant of variants) {
         // Find the attribute values corresponding to the variant's attributes
@@ -78,11 +73,11 @@ router.post("/", async (req, res) => {
         const newVariant = new ProductVariants({
           product: product._id,
           price: variant.price,
-          attributes: attrValues.map((value) => value._id), // Use the ObjectIds of attribute values
+          attributes: attrValues.map((value) => value._id), 
         });
 
         await newVariant.save();
-        variantList.push(newVariant._id); // Store the new variant's ObjectId
+        variantList.push(newVariant._id);
       }
     }
 
@@ -131,9 +126,8 @@ router.put("/:id", async (req, res) => {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    // Handle attributes and update or create them if necessary
     let attributeMap = {};
-    updatedProduct.attributes = []; // Reset attributes to ensure they are properly updated
+    updatedProduct.attributes = []; // Reset attributes to ensure they are properly 
 
     // Update or create ProductAttributes
     for (let attr of attributes) {
@@ -145,7 +139,6 @@ router.put("/:id", async (req, res) => {
 
       attributeMap[attr.name] = attribute._id;
 
-      // Update product's attributes with the correct ObjectId reference
       updatedProduct.attributes.push(attribute._id);
 
       // Handle attribute values, creating them if they do not exist
@@ -198,7 +191,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router
 
 // here I created routes for product realted api's like updating variants , fetching all details of product using id , and creating a product
 // I used populate method to fetch the data from other collections

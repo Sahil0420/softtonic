@@ -7,7 +7,7 @@ It's a node js server with ExpressJs. MongoDB schemas are designed to store the 
 3. npm or yarn or bun any package manager must be installed
 4. [Postman](https://www.postman.com/) - A lightweight api client which can be used to test api without creating a frontend. You can use any API client according to your need.
 
-## Steps to setup up this project in your local space.
+## Steps to setup this project in your local space.
 1. Run the following command in your command line.
 ```bash
    git clone https://github.com/Sahil0420/softtonic.git
@@ -33,11 +33,38 @@ bun index.js
 ```
 4. If your MongoDB is running locally it will connect to it. There is no need to create database and collections , they will be automatically created if api endpoints are used.
 
-5. To check that your server
+5. To check that your server is running correctly open your api client or any browser and write `localhost:3000/` in your seearch bar it will show **Hello** on the screen.
 
-## 1. Create a product
-  - **Endpoint** : POST /products
-  - **Description** : Creates a new product with variants.
+## API Documentation
+#### Server is running at [localhost:3000](http://localhost:3000/).
+
+##### 1. Register
+- **Endpoint** : POST $\quad$ /auth/register
+- **Description** : This route is used to create a new user account in the mongodb. It requires parameters like name , email (unique) and password. Password will be encrypted before saving into the database.
+- ***Request Body Example**
+```json
+{
+  "name" : "sahil",
+  "email" : "sahil@gmail.com"
+  "password" : "password"
+}
+```
+
+#### 2. Login
+- **Endpoint** : POST $\quad$ /auth/login
+- **Description** : This route is used to login into an existing account . If there is no account error will be returned through json response with http code 500.
+- **Request Body Example**
+```json
+{
+   "email":"sahil@gmail.com",
+   "password" : "password"
+}
+```
+- You wll get a jwt signed authorization token if logged in successfuly. This authorization token must be present in your http requests header in order to access the autheticated routes. 
+
+#### 3. Create a product
+  - **Endpoint** : POST $\quad$ /products
+  - **Description** : Creates a new product with variants. Authentication is required to use this route. To use this route uer have to create an account and log in to it and your authorization token must be present in  your http header.
   - **Request Body Example**
 ```json
 {
@@ -56,14 +83,56 @@ bun index.js
   ]
 }
 ```
-  - **Response**
-    - 201 Created
-    - ```json
-      {"message": "product successfully saved"}
-      ```
-    - 400 bad request
-    - ```json
-      {"message":"Error message"}
-      ```
+- **Response**
+ - 201 Created
+```json
+   {"message": "product successfully saved"}
+```
+ - 400 bad request
+```json
+   {"message":"Error message"}
+```
 
-## 2.  
+#### 4. Fetch Product Details
+- **Endpoint** : GET $\quad$ /products/:id
+- **Description** : This API endpoint fetches the specific product's details with all variants. This is also an authentication protected route therefore logged in account is required.
+- **Request Example**
+```json
+http://localhost:3000/products/67af8439d3940e79af94f274
+```
+- id of the product could be different **:id** refers to the dynamic part of the url.  Therefore there will be different results for the different valid id.
+- If the product id is not present in the collection or table . Error message will be return through json response with http status code 400 and any other error caught in catch will be returned with status code 500.
+
+#### 5. Update the Product Variants
+- **Endpoint** : PUT $\quad$ /products/:id
+- **Description** : This API endpoint is used to update the variants of the specified products. It required
+- **Request Example**
+```json
+http://localhost:3000/products/67af8439d3940e79af94f274
+```
+- **Request Body Example**
+```json
+   {
+    "name": "Jeans",
+    "variants": [
+      {
+        "color": "Blue",
+        "size": "32",
+        "price": 3500
+      },
+      {
+        "color": "Black",
+        "size": "34",
+        "price": 3700
+      },
+      {
+        "color": "Gray",
+        "size": "30",
+        "price": 3300
+      }
+    ]
+  },
+```
+- If the product not found it can't be updated therefore error `Product Not Found` will be returned with status code 404.
+- If updating product get successful the updated product json will be returned as `{new : true}` parameter is passed in the `findByIdAndUpdate()` method. This will return the product new updated version i n the result.
+- Other internal error will be returned from catch block with status code 400.

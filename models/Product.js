@@ -94,6 +94,6 @@ export const ProductVariants = mongoose.model(
   productVariants
 );
 export const ProductVariantAttribute = mongoose.model(
-  "ProductVariantAttribute",  
+  "ProductVariantAttribute",    
   productVariantAttributeSchema
 );

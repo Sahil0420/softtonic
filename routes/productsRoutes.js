@@ -1,4 +1,4 @@
-import express from 'express'
+import express from "express";
 import {
   Product,
   ProductAttributes,
@@ -26,40 +26,39 @@ router.post("/", async (req, res) => {
       type,
       price,
       content,
-      attributes: [], // Initialize an empty array for attributes
-      variants: [], // Initialize an empty array for variants
+      attributes: [],
+      variants: [],
     });
 
     // Save the product
+
     await product.save();
 
     let attributeMap = {};
+    if (attributes && attributes.length > 0) {
+      for (let attr of attributes) {
+        let attribute = await ProductAttributes.findOne({ name: attr.name });
+        if (!attribute) {
+          attribute = new ProductAttributes({ name: attr.name });
+          await attribute.save();
+        }
 
-    // Handle attributes
-    for (let attr of attributes) {
-      let attribute = await ProductAttributes.findOne({ name: attr.name });
-      if (!attribute) {
-        attribute = new ProductAttributes({ name: attr.name });
-        await attribute.save();
-      }
+        attributeMap[attr.name] = attribute._id;
 
-      attributeMap[attr.name] = attribute._id;
+        product.attributes.push(attribute._id);
 
-      product.attributes.push(attribute._id);
-
-      for (let value of attr.values) {
-        let attrValue = await ProductAttributesValues.findOne({ value });
-        if (!attrValue) {
-          attrValue = new ProductAttributesValues({
-            value: value,
-            attribute: attribute._id,
-          });
-          await attrValue.save();
+        for (let value of attr.values) {
+          let attrValue = await ProductAttributesValues.findOne({ value });
+          if (!attrValue) {
+            attrValue = new ProductAttributesValues({
+              value: value,
+              attribute: attribute._id,
+            });
+            await attrValue.save();
+          }
         }
       }
     }
-
-    await product.save();
 
     let variantList = [];
     if (type === "variant" && variants && variants.length > 0) {
@@ -73,7 +72,7 @@ router.post("/", async (req, res) => {
         const newVariant = new ProductVariants({
           product: product._id,
           price: variant.price,
-          attributes: attrValues.map((value) => value._id), 
+          attributes: attrValues.map((value) => value._id),
         });
 
         await newVariant.save();
@@ -92,7 +91,7 @@ router.post("/", async (req, res) => {
       .status(201)
       .json({ product, message: "Product created successfully" });
   } catch (error) {
-    return res.status(400).json({ message: error.message });
+    return res.status(400).json({ message: `this is errro${error.message}` });
   }
 });
 
@@ -127,7 +126,7 @@ router.put("/:id", async (req, res) => {
     }
 
     let attributeMap = {};
-    updatedProduct.attributes = []; // Reset attributes to ensure they are properly 
+    updatedProduct.attributes = []; // Reset attributes to ensure they are properly
 
     // Update or create ProductAttributes
     for (let attr of attributes) {
@@ -159,7 +158,7 @@ router.put("/:id", async (req, res) => {
     if (type === "variant" && variants && variants.length > 0) {
       // Clear existing variants and reassign them based on updated data
       updatedProduct.variants = [];
-      
+
       for (let variant of variants) {
         // Find the attribute values corresponding to the variant's attributes
         let attrValues = await ProductAttributesValues.find({
@@ -176,22 +175,19 @@ router.put("/:id", async (req, res) => {
         await newVariant.save();
         variantList.push(newVariant._id); // Store the new variant's ObjectId
       }
-      
+
       updatedProduct.variants = variantList; // Assign the new variants to the product
     }
 
-    // Save the updated product document
     await updatedProduct.save();
 
-    // Return the response with the updated product
     res.json({ message: "Product updated successfully", updatedProduct });
-
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 });
 
-export default router
+export default router;
 
 // here I created routes for product realted api's like updating variants , fetching all details of product using id , and creating a product
 // I used populate method to fetch the data from other collections

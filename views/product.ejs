@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Product</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        font-family: "Courier New", Courier, monospace;
+        box-sizing: border-box;
+      }
+
+      body {
+        width: 100%;
+        height: 100vh;
+        background-color: #f7f7f7;
+        display: grid;
+        place-items: center;
+      }
+
+      main {
+        background-color: #fff;
+        padding: 2rem;
+        border-radius: 1rem;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        display: grid;
+        gap: 1rem;
+      }
+
+      h1 {
+        color: #333;
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      form {
+        display: grid;
+        gap: 1rem;
+      }
+
+      label {
+        font-weight: bold;
+        color: #666;
+      }
+
+      input,
+      textarea {
+        padding: 0.5rem;
+        border: none;
+        border-radius: 0.5rem;
+        background-color: #f7f7f7;
+      }
+
+      button[type="submit"] {
+        background-color: #4caf50;
+        color: #fff;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 0.5rem;
+        cursor: pointer;
+      }
+
+      button[type="submit"]:hover {
+        background-color: #3e8e41;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Add Product</h1>
+      <form
+        action="/api/admin/add-product"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <label for="product_name">Product Name:</label>
+        <input type="text" id="product_name" name="product_name" required />
+
+        <label for="category_id">Category:</label>
+        <select id="category_id" name="category_id">
+          <% categories.forEach(category => { %>
+          <option value="<%= category._id %>">
+            <%= category.category_name %>
+          </option>
+          <% }); %>
+        </select>
+
+        <label for="subcategory_id">Subcategory:</label>
+        <select id="subcategory_id" name="subcategory_id">
+          <% subcategories.forEach(subcategory => { %>
+          <option value="<%= subcategory._id %>">
+            <%= subcategory.subcategory_name %>
+          </option>
+          <% }); %>
+        </select>
+
+        <label for="short_description">Short Description:</label>
+        <textarea
+          id="short_description"
+          name="short_description"
+          required
+        ></textarea>
+
+        <label for="long_description">Long Description:</label>
+        <textarea
+          id="long_description"
+          name="long_description"
+          required
+        ></textarea>
+
+        <label for="feature_img">Product Image:</label>
+        <input
+          type="file"
+          id="feature_img"
+          name="feature_img"
+          accept="image/*"
+          required
+        />
+
+        <button type="submit">Add Product</button>
+      </form>
+    </main>
+  </body>
+</html>

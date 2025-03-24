@@ -1,0 +1,15 @@
+category_name,subcategory_name,product_name,sku,long_description,short_description,type,feature_img,price,sale_price,stock,attributes,attribute_values,product_gallery,variant_sku,variant_price,variant_sale_price,variant_stock,variant_gallery
+electronics,smartphones,iphone 14,IPH14,The iPhone 14 features A15 Bionic chip.,Latest Apple iPhone,simple,img1.jpg,999,899,50,,,,,,,,
+electronics,smartphones,galaxy s24,GS24,The Galaxy S24 features AI capabilities.,Latest Samsung Flagship,variant,img7.jpg,899,799,30,color|storage,,,,,,,
+electronics,smartphones,galaxy s24,GS24,The Galaxy S24 features AI capabilities.,Latest Samsung Flagship,variant,img7.jpg,,,,color|storage,black|128gb,,GS24-BLK-128,899,799,15,img7.jpg|img8.jpg
+electronics,smartphones,galaxy s24,GS24,The Galaxy S24 features AI capabilities.,Latest Samsung Flagship,variant,img9.jpg,,,,color|storage,cream|256gb,,GS24-CRM-256,999,899,10,img9.jpg|img10.jpg
+electronics,smartphones,galaxy s24,GS24,The Galaxy S24 features AI capabilities.,Latest Samsung Flagship,variant,img7.jpg,,,,color|storage,black|128gb,,GS24-BLACK-128,899,799,15,img7.jpg|img8.jpg
+electronics,smartphones,galaxy s24,GS24,The Galaxy S24 features AI capabilities.,Latest Samsung Flagship,variant,img9.jpg,,,,color|storage,cream|256gb,,GS24-CREAM-256,999,899,10,img9.jpg|img10.jpg
+electronics,laptops,macbook air,MBA13,The MacBook Air features M15 chip.,Lightest MacBook,simple,img2.jpg,1299,1199,20,,,,,,,,
+electronics,laptops,dell xps,DXPS13,The Dell XPS features Intel Core i7.,Powerful Dell Laptop,variant,img3.jpg,999,899,15,color|storage,,,,,,,
+electronics,laptops,dell xps,DXPS13,The Dell XPS features Intel Core i7.,Powerful Dell Laptop,variant,img3.jpg,,,,color|storage,256gb|silver,,DXPS13-SILVER-256,999,899,10,img3.jpg|img4.jpg
+electronics,laptops,dell xps,DXPS13,The Dell XPS features Intel Core i7.,Powerful Dell Laptop,variant,img5.jpg,,,,color|storage,black|512gb,,DXPS13-BLACK-512,1299,1199,5,img5.jpg|img6.jpg
+electronics,tablets,ipad pro,IPADPRO,The iPad Pro features A12X chip.,Latest Apple iPad,simple,img11.jpg,799,699,25,,,,,,,,
+electronics,tablets,samsung tab,STAB7,The Samsung Tab features Android 11.,Powerful Samsung Tablet,variant,img12.jpg,499,399,30,color|storage,,,,,,,
+electronics,tablets,samsung tab,STAB7,The Samsung Tab features Android 11.,Powerful Samsung Tablet,variant,img12.jpg,,,,color|storage,black|64gb,,STAB7-BLACK-64,499,399,20,img12.jpg|img13.jpg
+electronics,tablets,samsung tab,STAB7,The Samsung Tab features Android 11.,Powerful Samsung Tablet,variant,img14.jpg,,,,color|storage,128gb|silver,,STAB7-SILVER-128,599,499,10,img14.jpg|img15.jpg
